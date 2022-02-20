@@ -41,6 +41,8 @@
 #include <string.h>
 #include <unistd.h>
 
+#include "openbsd-compat.h"
+
 #define MAXIMUM(a, b)	(((a) > (b)) ? (a) : (b))
 
 static FTSENT	*fts_alloc(FTS *, const char *, size_t);
