@@ -66,9 +66,9 @@ prop_area* prop_area::map_prop_area_rw(const char* filename, const char* context
   }
 
   if (context) {
-    if (fsetxattr(fd, XATTR_NAME_SELINUX, context, strlen(context) + 1, 0) != 0) {
-      async_safe_format_log(ANDROID_LOG_ERROR, "libc",
-                            "fsetxattr failed to set context (%s) for \"%s\"", context, filename);
+    // if (fsetxattr(fd, XATTR_NAME_SELINUX, context, strlen(context) + 1, 0) != 0) {
+      // async_safe_format_log(ANDROID_LOG_ERROR, "libc",
+      //                       "fsetxattr failed to set context (%s) for \"%s\"", context, filename);
       /*
        * fsetxattr() will fail during system properties tests due to selinux policy.
        * We do not want to create a custom policy for the tester, so we will continue in
@@ -79,9 +79,9 @@ prop_area* prop_area::map_prop_area_rw(const char* filename, const char* context
        * property separation.
        */
       if (fsetxattr_failed) {
-        *fsetxattr_failed = true;
+        // *fsetxattr_failed = true;
       }
-    }
+    // }
   }
 
   if (ftruncate(fd, PA_SIZE) < 0) {
