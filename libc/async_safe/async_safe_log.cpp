@@ -45,12 +45,16 @@
 #include <time.h>
 #include <unistd.h>
 
-#include <android/set_abort_message.h>
+#include <android-base/macros.h>
+
+// #include <android/set_abort_message.h>
 #include <async_safe/log.h>
 
 #include "private/CachedProperty.h"
 #include "private/ErrnoRestorer.h"
 #include "private/ScopedPthreadMutexLocker.h"
+
+#define __assert(x) ((void)((x) || (__assert_fail(#x, __FILE__, __LINE__, __func__),0)))
 
 // Don't call libc's close or socket, since it might call back into us as a result of fdsan/fdtrack.
 #pragma GCC poison close
@@ -413,7 +417,7 @@ static void out_vformat(Out& o, const char* format, va_list args) {
       buffer[0] = '%';
       buffer[1] = '\0';
     } else {
-      __assert(__FILE__, __LINE__, "conversion specifier unsupported");
+      __assert("conversion specifier unsupported");
     }
 
     if (str == nullptr) {
@@ -426,7 +430,7 @@ static void out_vformat(Out& o, const char* format, va_list args) {
     slen = strlen(str);
 
     if (sign != '\0' || prec != -1) {
-      __assert(__FILE__, __LINE__, "sign/precision unsupported");
+      __assert("sign/precision unsupported");
     }
 
     if (slen < width && !padLeft) {
@@ -590,7 +594,7 @@ void async_safe_fatal_va_list(const char* prefix, const char* format, va_list ar
   // Log to the log for the benefit of regular app developers (whose stdout and stderr are closed).
   async_safe_write_log(ANDROID_LOG_FATAL, "libc", msg);
 
-  android_set_abort_message(msg);
+  // android_set_abort_message(msg);
 }
 
 void async_safe_fatal_no_abort(const char* fmt, ...) {

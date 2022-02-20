@@ -41,6 +41,8 @@
 #include <sys/_system_properties.h>
 #include <unistd.h>
 
+#include <android-base/macros.h>
+
 #include <async_safe/log.h>
 #include <async_safe/CHECK.h>
 
